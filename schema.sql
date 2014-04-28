@@ -9,8 +9,9 @@ CREATE TABLE expositionPermanente(
 CREATE TABLE salle(
 	nom VARCHAR PRIMARY KEY,
 	capaciteMax INTEGER,
-	expositionTemp VARCHAR REFERENCES expositionTemporaire(nom),
-	expositionPer VARCHAR REFERENCES expositionPermanente(nom)
+	expositionTemp VARCHAR REFERENCES expositionTemporaire(nom) NOT NULL,
+	expositionPer VARCHAR REFERENCES expositionPermanente(nom) NOT NULL,
+	-- J'ajoute les NOT NULL pour implémenter les contraintes AVEC IN 
 	CHECK ((expositionTemp IS NULL OR  expositionPer IS NULL)OR(expositionTemp IS NOT NULL   
 		OR expositionPer IS NULL))
 	);
