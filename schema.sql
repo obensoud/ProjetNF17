@@ -6,7 +6,20 @@ CREATE TABLE expositionTemporaire(
 CREATE TABLE expositionPermanente(
 	nom VARCHAR PRIMARY KEY);
 
+CREATE TABLE salle(
+	nom VARCHAR PRIMARY KEY,
+	capaciteMax INTEGER,
+	expositionTemp VARCHAR REFERENCES expositionTemporaire(nom),
+	expositionPer VARCHAR REFERENCES expositionPermanente(nom)
+	CHECK ((expositionTemp IS NULL OR  expositionPer IS NULL)OR(expositionTemp IS NOT NULL   
+		OR expositionPer IS NULL))
+	);
 
+CREATE TABLE panneau(
+	numero INTEGER PRIMARY KEY,
+	texte VARCHAR (255),
+	salle VARCHAR (255),
+	FOREIGN KEY (salle) REFERENCES salle(nom));
 
 CREATE TABLE guide(
 	id_guide INTEGER,
