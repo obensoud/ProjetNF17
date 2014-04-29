@@ -136,4 +136,14 @@ class DB{
 		return false;
 	}
 
+	public function delete($table, $condition){
+		if ($table != "" && $condition != "") {
+			$query = "DELETE FROM $table WHERE $condition";
+			$this->messages['last_query'] = $query;
+			$req = $this->pdo->exec($query);
+			return true;
+		}
+		return false;
+	}
+
 }
