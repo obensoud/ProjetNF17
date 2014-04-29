@@ -23,7 +23,7 @@ class DB{
 		try{
 		    $this->pdo = new PDO('pgsql:host='.$default['host'].';dbname='.$default['database']);
 			$this->messages['db'] = "DB initialized";
-			echo $this->messages['db'];
+			//echo $this->messages['db'];
 		}catch(PDOException $e){
 	        echo '<br>Erreur : '.$e->getMessage().'<br />';
 	       	echo '<br>N° : '.$e->getCode();
@@ -55,8 +55,8 @@ class DB{
 
    			$req->closeCursor();
 			$this->messages['last_query'] = $query;
-			//echo "La dernière requête est :".$this->messages['last_query'];
-			//print_r ($datas);
+			/* echo "La dernière requête est :".$this->messages['last_query'];
+			   print_r ($datas); */
 			return $datas;
 		}
 		return false;
@@ -65,7 +65,7 @@ class DB{
 	/** 
 	* execute une requête SQL de type INSERT sur la bdd
 	* @param string $table le nom de la table dans laquelle on veut insérer
-	* @param array $array le tableau des variables de la requete
+	* @param array $array le tableau des variables de la requete 'champs'=>valeur
 	* @param bool $idnull sert à savoir s'il y a un champ id dans la table
 	* @return boolean
 	*/
@@ -81,12 +81,12 @@ class DB{
 			}
 			$query = substr($query, 0, -1);
 			$query .= ");";
-			echo "<br>".$query;
+			//echo "<br>".$query;
 			$this->messages['last_query'] = $query;
 			$req = $this->pdo->prepare($query);
 			try {
-				echo"<br><br>";
-				print_r($array);
+				//echo"<br><br>";
+				//print_r($array);
 				$req->execute($array);
 				$this->lastId = $this->pdo->lastInsertId();
 				return true;
@@ -105,6 +105,33 @@ class DB{
 				}
 				return false;
 			}
+		}
+		return false;
+	}
+	/** 
+	* execute une requête SQL de type UPDATE ... SET ... WHERE .. sur la bdd
+	* @param string $table le nom de la table dans laquelle on veut mettre à jour
+	* @param array $array le tableau des variables de la requete 'champs'=>valeur
+	* @param string $condition est la condition après le where dans le UPDATE
+	* @return boolean
+	*/
+	public function update($table, $array = null, $condition = null){
+		if ($table != "" && $condition != "" && isset($array)) {
+			$query = "UPDATE $table SET";
+
+			foreach ($array as $k => $v) {
+				$query .= " $k=:$k,";
+			}
+			
+			$query = substr($query, 0, -1);
+			$query .= " WHERE $condition ;";
+			echo $query."<br>";
+			$this->messages['last_query'] = $query;
+			$req = $this->pdo->prepare($query);
+			print_r($array);
+			print"<br>";
+			$req->execute($array);
+			return true;
 		}
 		return false;
 	}
