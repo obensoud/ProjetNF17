@@ -29,11 +29,35 @@ CREATE TABLE guide(
 	adresse VARCHAR,
 	dateEbauche date);
 
-CREATE TYPE day AS ENUM ('lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche');
+CREATE TYPE jour AS ENUM ('lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche');
 
-CREATE TABLE jour(
-	nom VARCHAR PRIMARY KEY);
+
+CREATE TABLE creneau (
+	guide INTEGER REFERENCES guide(id_guide),
+	expositionPermanente VARCHAR REFERENCES expositionPermanente(nom),
+	jour jour,
+	debutHoraire TIME,
+	finHoraire TIME,
+	CHECK (to_char(finHoraire-debutHoraire, 'HH:MI:SS') = '02:00:00'),
+	PRIMARY KEY(guide, expositionPermanente, jour, debutHoraire)
+	);
 	
+CREATE TABLE affecter (
+	guide INTEGER REFERENCES guide(id_guide),
+	expositionTemporaire VARCHAR REFERENCES expositionTemporaire(nom),
+	PRIMARY KEY (guide, expositionTemporaire)
+	);
+
+CREATE TABLE museeExterieur (
+	nom VARCHAR PRIMARY KEY,
+	adresse VARCHAR
+	);
+
+CREATE TYPE oeuvre AS enum('peinture', 'sculpture', 'photographie');
+	
+CREATE TABLE typeOeuvre (
+	nom oeuvre PRIMARY KEY
+	);
 	
 	
 CREATE TABLE restauration (
