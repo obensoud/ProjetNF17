@@ -136,6 +136,12 @@ class DB{
 		return false;
 	}
 
+	/** 
+	* execute une requête SQL de type DELETE sur la bdd
+	* @param string $table le nom de la table dans laquelle on veut supprimer un tuple
+	* @param string $condition est la condition de selection des tuples à supprimer
+	* @return boolean
+	*/
 	public function delete($table, $condition){
 		if ($table != "" && $condition != "") {
 			$query = "DELETE FROM $table WHERE $condition";
@@ -144,6 +150,22 @@ class DB{
 			return true;
 		}
 		return false;
+	}
+
+	public function lastInsertId(){
+		return $this->lastId;
+	}
+
+	public function lastError(){
+		return $this->messages['error'];
+	}
+
+	public function lastDBMessage(){
+		return $this->messages['db'];
+	}
+
+	public function lastQuery(){
+		return $this->messages['last_query'];
 	}
 
 }

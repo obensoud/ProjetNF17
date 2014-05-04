@@ -82,3 +82,44 @@ CREATE TABLE pret(
 	dateDebut TIMESTAMP,
 	dateFin TIMESTAMP,
 	PRIMARY KEY(musee, interne));
+
+Create table Auteur(
+	id_auteur int NOT NULL,
+	nom VARCHAR(10),
+	dateNaissance Date,
+	dateMort Date,
+	Unique(id_auteur)
+);
+
+create table interne(
+	id_oeuvre int,
+	titre varchar(10),
+	jour Date,
+	dimension Varchar(10),
+	type TypeOeuvre NOT NULL,
+	auteur Auteur,
+	prix_acquisition float, 
+	unique(id_oeuvre),
+	exposition REFERENCES Expositionpermanente NOT NULL
+);
+
+						
+Create table Externe (
+	id_oeuvre  int,					
+	titre  Varchar(10),
+	jour : date,
+	dimension  Varchar(10),
+	id_auteur int NOT NULL,
+	type REFERENCES TypeOeuvre,
+	exposition REFERENCES ExpositionTemporaire,
+	FOREIGN KEY (id_auteur) Auteur Utilisateur(id_auteur)			
+);
+					
+Create table Emprunt (
+	musee REFERENCES MuseeExterieur,						
+	externe REFERENCES Externe, 
+	dateDebut : date,
+	dateFin : date	,
+	Unique(musee,externe)					
+) ;
+
